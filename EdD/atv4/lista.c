@@ -94,3 +94,51 @@ void lista_inserir_no_i(No** H, No* L, int i){
         }
     }
 }
+
+void lista_remover_no_i(No** L, int i){
+    if (quantidade_nos((*L)) > i && i > -1){
+        int n = 0;
+        if (n == i-1){
+            No* temp = no('P', (*L)->proximo_no);
+            if ((*L)->proximo_no->proximo_no != NULL){
+                (*L)->proximo_no = (*L)->proximo_no->proximo_no;
+            }
+            if (temp->proximo_no != NULL){
+                free(temp->proximo_no);
+            }
+            (*L)->proximo_no = NULL;
+            free(temp);
+        }
+        else if (i == 0){
+            No* temp = no('P', (*L)->proximo_no);
+            free((*L));
+            *L = temp->proximo_no;
+            free(temp);
+        }
+        else if (i != n && i != 0){
+            lista_remover_no_i(&(*L)->proximo_no, i-1);
+        }
+    }
+}
+
+void lista_remover_no(No** L, char valor){
+    No* atual = *L;
+    No* anterior = NULL;
+
+    while (atual != NULL) {
+        if (atual->valor == valor) {
+            if (anterior == NULL) { // Remoção do primeiro nó
+                *L = atual->proximo_no;
+                free(atual);
+                atual = *L;
+            } else {
+                anterior->proximo_no = atual->proximo_no;
+                free(atual);
+                atual = anterior->proximo_no;
+            }
+        } else {
+            anterior = atual;
+            atual = atual->proximo_no;
+        }
+    }
+}
